@@ -40,7 +40,7 @@ function Accordion({items}) {
             {items.map((item,index)=>{
                 return (
                 <div>
-                <div onClick={() => onTitleClick(index)}> {item.title} </div>
+                <div onClick={() => onTitleClick(index)}> {activeIndexes.includes(index)? `-${item.content}`: `+${item.content}`} </div>
                 <div style= {{display: activeIndexes.includes(index)? 'block' : 'none'}}> {item.content} </div> 
                 </div>
                 )

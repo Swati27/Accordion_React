@@ -1,30 +1,60 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-const Accordion = ({items}) =>
-{
-    const [activeIndex, setActiveIndex] = useState([]);
+function Accordion({items}) {
 
-    const handleTitle = (index,items) => {
-        items.isExpand =  items.isExpand? false: true;
-        const newArr = [...activeIndex, index]
-        setActiveIndex(newArr);
+    const [allowMultiple, SetAllowMultiple] = useState(false);
+    const [activeIndexes, SetActiveIndexes] = useState([]);
+    //const [isActive, setIsActive] = useState(false);
+
+    const onCheckboxChange = () => {
+        SetAllowMultiple(!allowMultiple);
     }
-    return (
-    <div>
-      {
-        items.map((items,index)=> {
-            return (
-                <div>
-                    <div key = {index} onClick={()=> handleTitle(index,items)}> {items.isExpand ? `-${items?.title}` : `✚${items?.title}`}</div>
-                        <div key = {index} style = {{display: items.isExpand && activeIndex.includes(index)? 'block' : 'none' }}> {items?.content}</div>     
-                </div>
-            )
-        })
-      }
-    </div>
-   
-    );
 
+    const onTitleClick = (index) => {
+        let newArr;
+            if(activeIndexes.includes(index))
+        {
+            
+            newArr =activeIndexes.filter((activeIndex)=> activeIndex!== index);
+        }
+        else
+        {
+            newArr = [...activeIndexes, index]
+        }
+        SetActiveIndexes(newArr);
+    
+    }
+
+    const renderItems = () => {
+        
+    return (
+        <div>
+            {items.map((item,index)=>{
+                return (
+                <div>
+                <div onClick={() => onTitleClick(index)}> {item.title} </div>
+                <div style= {{display: activeIndexes.includes(index)? 'block' : 'none'}}> {item.content} </div> 
+                </div>
+                )
+            })
+            }
+        </div>
+        )
+    }
+
+  return (
+    <div>
+        <label>
+            <input type='checkbox' checked = {allowMultiple} onChange={onCheckboxChange}></input>
+            Allow multiple
+        </label>
+            {renderItems()}
+    </div>
+  )
 }
 
 export default Accordion;
+
+// We will have activeIndexes as an arra state  but we will have a field called isActtive for these indexes on basis of which we render
+// I am hiding/ displaying on basis of which index is clicked
+// when for collapse I had to pop I used filter function => activeIndexes.filter((activeIndex)=> activeIndex!== index);

@@ -2,27 +2,35 @@ import React, { useState } from 'react'
 
 function Accordion({items}) {
 
-    const [allowMultiple, SetAllowMultiple] = useState(false);
-    const [activeIndexes, SetActiveIndexes] = useState([]);
-    //const [isActive, setIsActive] = useState(false);
+    const [allowMultiple, setAllowMultiple] = useState(false);
+    const [activeIndexes, setActiveIndexes] = useState([]);
 
     const onCheckboxChange = () => {
-        SetAllowMultiple(!allowMultiple);
+        setAllowMultiple(!allowMultiple);
+        setActiveIndexes([]);
     }
 
     const onTitleClick = (index) => {
+      if (allowMultiple) 
+      {
         let newArr;
-            if(activeIndexes.includes(index))
-        {
-            
-            newArr =activeIndexes.filter((activeIndex)=> activeIndex!== index);
-        }
-        else
-        {
-            newArr = [...activeIndexes, index]
-        }
-        SetActiveIndexes(newArr);
-    
+        if(activeIndexes.includes(index))
+    {
+        
+        newArr =activeIndexes.filter((activeIndex)=> activeIndex!== index);
+    }
+    else
+    {
+        newArr = [...activeIndexes, index]
+    }
+        setActiveIndexes(newArr);
+      }
+      else
+      {
+        // If only one allowed, collapse the current item and expand the clicked item
+        setActiveIndexes((prevIndex)=> prevIndex.includes(index)? [] : [index]
+        )
+      }
     }
 
     const renderItems = () => {
